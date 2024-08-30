@@ -13,21 +13,38 @@ def calcular_coeficientes(x, y):
 
     return m0, m1
 
-# Función para hacer predicciones usando el modelo
+# Función para hacer predicciones usando los coeficientes
 def prediccion(x, m0, m1):
     return [((m1 * xi) + m0) for xi in x]
+
+# Función para evaluar que tan bueno es el modelo
+def evaluar(X, y_true, m0, m1):
+    y_pred = prediccion(X, m0, m1)
+
+    # Calcular el Error Cuadrático Medio (MSE)
+    errores_cuadrados = [(yi - pred) ** 2 for yi, pred in zip(y_true, y_pred)]
+    mse = sum(errores_cuadrados) / len(errores_cuadrados)
+
+    # Calcular el Error Absoluto Medio (MAE)
+    errores_absolutos = [abs(yi - pred) for yi, pred in zip(y_true, y_pred)]
+    mae = sum(errores_absolutos) / len(errores_absolutos)
+
+    return mse, mae
 
 
 # EJEMPLO DE USO
 x = [1, 2, 3, 4, 5]
 y = [2, 3, 5, 7, 11]
 
-# Coeficientes
 m0, m1 = calcular_coeficientes(x, y)
 
-# Predicciones
 predicciones = prediccion(x, m0, m1)
 
-print(f'Intercepto (m0): {m0}')
-print(f'Pendiente (m1): {m1}')
-print(f'Predicciones: {predicciones}')
+print(f'M0: {m0}')
+print(f'M1: {m1}')
+print(f'Predicciones:\n {predicciones}')
+
+# Evaluación del modelo
+mse, mae = evaluar(x, y, m0, m1)
+print(f'MSE: {mse}')
+print(f'MAE: {mae}')
