@@ -33,18 +33,20 @@ def evaluar(X, y_true, m0, m1):
 
 
 # EJEMPLO DE USO
-x = [1, 2, 3, 4, 5]
-y = [2, 3, 5, 7, 11]
+# Datos de ejemplo
+X_train = [1, 2, 3, 4, 5]
+y_train = [3, 4, 5, 7, 11]
+X_test = [2, 8, 3, 6, 1]
+y_test = [10, 8, 6, 4, 2]
 
-m0, m1 = calcular_coeficientes(x, y)
+# Calcular coeficientes
+m0, m1 = calcular_coeficientes(X_train, y_train)
+print(f"Coeficientes calculados: m0 = {m0:.4f}, m1 = {m1:.4f}")
 
-predicciones = prediccion(x, m0, m1)
+# Hacer predicciones con los datos de prueba
+predicciones = prediccion(X_test, m0, m1)
+print(f"Predicciones:\n {predicciones}")
 
-print(f'M0: {m0}')
-print(f'M1: {m1}')
-print(f'Predicciones:\n {predicciones}')
-
-# Evaluación del modelo
-mse, mae = evaluar(x, y, m0, m1)
-print(f'MSE: {mse}')
-print(f'MAE: {mae}')
+# Evaluar el modelo
+mse, mae = evaluar(X_test, y_test, m0, m1)
+print(f"Evaluación del modelo:\n MSE = {mse:.4f}\n MAE = {mae:.4f}")
