@@ -12,7 +12,7 @@ import seaborn as sns #type: ignore
 # Tiene información del estudiante así como su desempeño académico en los semestres
 # El objetivo es predecir si un estudiante abandonó, sigue inscrito o se gradua
 
-df = pd.read_csv('data.csv', delimiter=';')
+df = pd.read_csv('ML con framework/data.csv', delimiter=';')
 X = df.drop(columns=['Target'])
 y = df['Target']
 
@@ -26,10 +26,10 @@ tree = DecisionTreeClassifier()
 # Hiperparámetros para optimización
 param_grid = {
     'criterion': ['gini', 'entropy'],   # Función para medir calidad de una división
-    'max_depth': [2, 3, 4, 5],          # Profundidad máxima del árbol
-    'min_samples_split': [2, 4, 6],     # Mínimo de muestras para dividir un nodo
-    'min_samples_leaf': [1, 2, 3],      # Mínimo de muestras en una hoja
-    'max_features': [None, 10, 20, 30]  # Número de características a considerar en cada división
+    'max_depth': [4, 5, 6, 7],          # Profundidad máxima del árbol
+    'min_samples_split': [4, 5, 6, 7],     # Mínimo de muestras para dividir un nodo
+    'min_samples_leaf': [2, 3, 4],      # Mínimo de muestras en una hoja
+    'max_features': [None, 15, 25, 35]  # Número de características a considerar en cada división
 }
 
 # GridSearchCV para buscar el mejor modelo tomando en cuenta un diccionario de hiperparámetros
@@ -51,26 +51,19 @@ y_val_pred = best_model.predict(X_val)
 print("\nReporte de clasificación (Validation Set):")
 print(classification_report(y_val, y_val_pred))
 
-print("\nMatriz de confusión (Validation Set):")
-conf_matrix_val = confusion_matrix(y_val, y_val_pred)
-sns.heatmap(conf_matrix_val, annot=True, fmt='d', cmap='Blues')
+# Predicción del conjunto de prueba
+y_test_pred = best_model.predict(X_test)
+
+# Métricas de evaluación con el conjunto de prueba
+print("\nMétricas en el conjunto de prueba (Test Set):")
+print(f"Accuracy: {accuracy_score(y_test, y_test_pred):.4f}")
+print(f"Precision: {precision_score(y_test, y_test_pred, average='macro'):.4f}")
+print(f"Recall: {recall_score(y_test, y_test_pred, average='macro'):.4f}")
+print(f"F1 Score: {f1_score(y_test, y_test_pred, average='macro'):.4f}")
+
+print("\nMatriz de confusión (Test Set):")
+conf_matrix_test = confusion_matrix(y_test, y_test_pred)
+sns.heatmap(conf_matrix_test, annot=True, fmt='d', cmap='Blues')
 plt.xlabel('Predicted')
 plt.ylabel('Actual')
 plt.show()
-
-# # Predicción del conjunto de prueba
-# y_test_pred = best_model.predict(X_test)
-
-# # Métricas de evaluación con el conjunto de prueba
-# print("\nMétricas en el conjunto de prueba (Test Set):")
-# print(f"Accuracy: {accuracy_score(y_test, y_test_pred):.4f}")
-# print(f"Precision: {precision_score(y_test, y_test_pred):.4f}")
-# print(f"Recall: {recall_score(y_test, y_test_pred):.4f}")
-# print(f"F1 Score: {f1_score(y_test, y_test_pred):.4f}")
-
-# print("\nMatriz de confusión (Test Set):")
-# conf_matrix_test = confusion_matrix(y_test, y_test_pred)
-# sns.heatmap(conf_matrix_test, annot=True, fmt='d', cmap='Blues')
-# plt.xlabel('Predicted')
-# plt.ylabel('Actual')
-# plt.show()
